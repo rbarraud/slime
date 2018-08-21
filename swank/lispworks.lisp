@@ -235,7 +235,8 @@
 (defimplementation function-name (function)
   (nth-value 2 (function-lambda-expression function)))
 
-(defimplementation macroexpand-all (form)
+(defimplementation macroexpand-all (form &optional env)
+  (declare (ignore env))
   (walker:walk-form form))
 
 (defun generic-function-p (object)
@@ -320,15 +321,13 @@ Return NIL if the symbol is unbound."
 (defmethod env-internals:environment-display-notifier 
     ((env slime-env) &key restarts condition)
   (declare (ignore restarts condition))
-  (funcall (swank-sym :swank-debugger-hook) condition *debugger-hook*)
-  ;;  nil
-  )
+  (swank:swank-debugger-hook condition *debugger-hook*))
 
 (defmethod env-internals:environment-display-debugger ((env slime-env))
   *debug-io*)
 
 (defmethod env-internals:confirm-p ((e slime-env) &optional msg &rest args)
-  (apply (swank-sym :y-or-n-p-in-emacs) msg args))
+  (apply #'swank:y-or-n-p-in-emacs msg args))
 
 (defimplementation call-with-debugger-hook (hook fun)
   (let ((*debugger-hook* hook))
@@ -376,7 +375,7 @@ Return NIL if the symbol is unbound."
                              name)))
                 (nth-next-frame frame 1)))))
     (or (find-named-frame 'invoke-debugger)
-        (find-named-frame (swank-sym :safe-backtrace))
+        (find-named-frame 'swank::safe-backtrace)
         ;; if we can't find a likely top frame, take any old frame
         ;; at the top
         (dbg::debugger-stack-current-frame dbg::*debugger-stack*))))
@@ -831,8 +830,10 @@ function names like \(SETF GET)."
   (defxref who-sets       hcl:who-sets))
 
 (defimplementation who-specializes (classname)
-  (let ((methods (clos:class-direct-methods (find-class classname))))
-    (xref-results (mapcar #'dspec:object-dspec methods))))
+  (let ((class (find-class classname nil)))
+    (when class
+      (let ((methods (clos:class-direct-methods class)))
+        (xref-results (mapcar #'dspec:object-dspec methods))))))
 
 (defun xref-results (dspecs)
   (flet ((frob-locs (dspec locs)
@@ -1009,10 +1010,6 @@ function names like \(SETF GET)."
   (list :priority (mp:process-priority thread)
         :idle (mp:process-idle-time thread)))
 
-;;; Some intergration with the lispworks environment
-
-(defun swank-sym (name) (find-symbol (string name) :swank))
-      
 
 ;;;; Weak hashtables
 

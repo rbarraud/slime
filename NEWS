@@ -1,4 +1,71 @@
 * SLIME News                                -*- mode: outline; coding: utf-8 -*-
+* 2.22 (July 2018)
+*** Improved compatiblity with Emacs 26
+
+* 2.21 (June 2018)
+*** Improved compatiblity with Emacs 26
+*** Mezzano support
+
+* 2.20 (August 2017)
+** Core
+*** More secure handling of ~/.slime-secret
+** SBCL backend
+*** Compatiblity with the latest SBCL and older SBCL.
+** ECL backend
+*** Numerous enhancements
+
+* 2.19 (February 2017)
+** Core
+*** Function `create-server` now accepts optional `interface` argument.
+Swank will bind the PORT on this interface. By default, interface is 127.0.0.1.
+This argument can be used, for example, to bind swank on IPv6 interface "::1".
+** SBCL backend
+*** Now swank can be bound to IPv6 interface and can work on IPv6-only machines.
+*** Compatiblity with the latest SBCL
+
+* 2.18 (May 2016)
+*** Mostly bug fixes and compatibility with newer implementations
+
+* 2.17 (February 2016)
+** Contribs
+*** New contrib, slime-macrostep, for more advanced in-place macroexpansion.
+*** New contrib, slime-quicklisp.
+
+* 2.16 (January 2016)
+*** Auto-completion now supports package-local nicknames on SBCL and ABCL.
+*** Bug fixes and updates for newer implementations.
+
+* 2.15 (August 2015)
+** Core
+*** Completions are now displayed with `completion-at-point'.
+The new variable `slime-completion-at-point-functions' should now be
+used to customize completion.  The old variable
+`slime-complete-symbol-function' still works, but it is considered
+obsolete and will be removed eventually.
+
+** SBCL backend
+*** M-. can locate forms within PROGN/MACROLET/etc. Needs SBCL 1.2.15 
+
+* 2.14 (June 2015)
+** Core
+*** Rationals are displayed in the echo area as floats too
+*** Some of SLDB's faces now have MORE COLOR
+*** Clicking with mouse-1 within inspector does things
+As do mouse-6 and mouse-7. (Thanks to Attila Lendvai.)
+
+** slime-c-p-c (Compound Prefix Completion)
+*** Now takes a better guess at symbol case (issue #233)
+
+** slime-fancy
+*** slime-mdot-fu is now enabled by default
+
+** SBCL backend
+*** Now able to jump to ir1-translators, declaims and alien types
+*** Various updates supporting SBCL 1.2.12
+
+** ABCL backend
+*** Fixed inspection of frame-locals in the debugger
+(Thanks to Mark Evenson.)
 
 * 2.13 (March 2015)
 
